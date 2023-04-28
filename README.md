@@ -1,3 +1,3 @@
 # NetworkingLayer
 
-A description of this package.
+Used for calling APIs using Combine and MVVM.
