@@ -47,6 +47,9 @@ public class NetworkingLayerRequestable: NSObject, Requestable {
                 let decoder = JSONDecoder()
                 do {
                     let result = try decoder.decode(BaseMainResponse.self, from: output.data)
+                    if let errorCode = result.errorCode, errorCode == NetworkErrorCode.sessionExpired.rawValue || errorCode == NetworkErrorCode.sessionExpired2.rawValue {
+                        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "SessionExpired"), object: nil)
+                    }
                     if let errorMessage = result.errorMsg, !errorMessage.isEmpty {
                         throw NetworkError.apiError(code: Int(result.errorCode ?? "") ?? 0, error: errorMessage)
                     }
@@ -86,4 +89,9 @@ extension NetworkingLayerRequestable: URLSessionDelegate {
         
     }
     
+}
+
+enum NetworkErrorCode: String {
+    case sessionExpired = "0000252"
+    case sessionExpired2 = "101"
 }
