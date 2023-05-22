@@ -30,10 +30,10 @@ public final class SmilesNetworkReachability {
                 print("No connection.")
                 // post disconnected notification
             }
-            print(path.isExpensive)
+            // print(path.isExpensive)
         }
         
-        let queue = DispatchQueue(label: "NetworkMonitor")
+        let queue = DispatchQueue(label: "NetworkMonitor", qos: .userInitiated)
         monitor.start(queue: queue)
     }
     
