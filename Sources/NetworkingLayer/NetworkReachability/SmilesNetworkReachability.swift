@@ -19,9 +19,9 @@ public final class SmilesNetworkReachability {
     var isReachableOnCellular: Bool = true
     
     func startMonitoring() {
-        monitor.pathUpdateHandler = { [weak self] path in
-            self?.status = path.status
-            self?.isReachableOnCellular = path.isExpensive
+        monitor.pathUpdateHandler = { path in
+            self.status = path.status
+            self.isReachableOnCellular = path.isExpensive
             
             if path.status == .satisfied {
                 print("We're connected!")
