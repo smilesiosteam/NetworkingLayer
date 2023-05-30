@@ -17,15 +17,22 @@ let package = Package(
     dependencies: [
         // Dependencies declare other packages that this package depends on.
 //         .package(url: "https://github.com/ashleymills/Reachability.swift", branch: "master"),
-        .package(url: "https://github.com/krzyzanowskim/CryptoSwift.git", .upToNextMajor(from: "1.6.0"))
-        
+        .package(url: "https://github.com/krzyzanowskim/CryptoSwift.git", .upToNextMajor(from: "1.6.0")),
+        .package(url: "https://github.com/Alamofire/Alamofire.git", .upToNextMajor(from: "5.6.4")),
+        .package(url: "https://github.com/smilesiosteam/SmilesLanguageManager.git", .upToNextMinor(from: "1.0.0")),
+        .package(url: "https://github.com/smilesiosteam/SmilesBaseMainRequest.git", .upToNextMinor(from: "1.0.0"))
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
         // Targets can depend on other targets in this package, and on products in packages this package depends on.
         .target(
             name: "NetworkingLayer",
-            dependencies: [.product(name: "CryptoSwift", package: "CryptoSwift")]),
+            dependencies: [
+                .product(name: "CryptoSwift", package: "CryptoSwift"),
+                .product(name: "Alamofire", package: "Alamofire"),
+                .product(name: "SmilesLanguageManager", package: "SmilesLanguageManager"),
+                .product(name: "SmilesBaseMainRequestManager", package: "SmilesBaseMainRequest")
+            ]),
         .testTarget(
             name: "NetworkingLayerTests",
             dependencies: ["NetworkingLayer"]),

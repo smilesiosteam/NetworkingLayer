@@ -6,28 +6,30 @@
 //
 
 import Foundation
+import SmilesBaseMainRequestManager
 
-struct BaseMainResponse : Codable {
-
-    let additionalInfo : [BaseMainResponseAdditionalInfo]?
-    let responseCode : String?
-    let responseMsg : String?
-    let errorCode : String?
-    let errorMsg : String?
-    let errorTitle: String?
-    let extTransactionId: String?
+public class BaseMainResponse : Codable {
     
-    enum CodingKeys: String, CodingKey {
-        case additionalInfo
-        case responseCode
-        case responseMsg
-        case errorCode
-        case errorMsg
-        case errorTitle
+    public var additionalInfo : [BaseMainResponseAdditionalInfo]?
+    public var responseCode : String?
+    public var responseMsg : String?
+    public var errorCode : String?
+    public var errorMsg : String?
+    public var errorTitle: String?
+    public var extTransactionId: String?
+    
+    
+    private enum CodingKeys: String, CodingKey {
+        case additionalInfo = "additionalInfo"
+        case responseCode = "responseCode"
+        case responseMsg = "responseMsg"
+        case errorCode = "errorCode"
+        case errorMsg = "errorMsg"
+        case errorTitle = "errorTitle"
         case extTransactionId
     }
     
-    init(from decoder: Decoder) throws {
+    public required init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         additionalInfo = try values.decodeIfPresent([BaseMainResponseAdditionalInfo].self, forKey: .additionalInfo)
         responseCode = try values.decodeIfPresent(String.self, forKey: .responseCode)
@@ -38,14 +40,7 @@ struct BaseMainResponse : Codable {
         extTransactionId = try values.decodeIfPresent(String.self, forKey: .extTransactionId)
     }
     
-}
-
-
-
-
-struct BaseMainResponseAdditionalInfo : Codable {
+    public init() {}
     
-    let name : String?
-    let value : String?
-
 }
+

@@ -1,12 +1,48 @@
 {
   "pins" : [
     {
+      "identity" : "alamofire",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Alamofire/Alamofire.git",
+      "state" : {
+        "revision" : "bc268c28fb170f494de9e9927c371b8342979ece",
+        "version" : "5.7.1"
+      }
+    },
+    {
       "identity" : "cryptoswift",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/krzyzanowskim/CryptoSwift.git",
       "state" : {
         "revision" : "19b3c3ceed117c5cc883517c4e658548315ba70b",
         "version" : "1.6.0"
+      }
+    },
+    {
+      "identity" : "smilesbasemainrequest",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/smilesiosteam/SmilesBaseMainRequest.git",
+      "state" : {
+        "revision" : "132a0e82f71402e3ea78bcfb50a4a264e3a3585f",
+        "version" : "1.0.4"
+      }
+    },
+    {
+      "identity" : "smileslanguagemanager",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/smilesiosteam/SmilesLanguageManager.git",
+      "state" : {
+        "revision" : "1ead4bcf578ffdeee7318bddfd3d8b2dbdcc2597",
+        "version" : "1.0.0"
+      }
+    },
+    {
+      "identity" : "smilesstorage",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/hananahmad/SmilesStorage.git",
+      "state" : {
+        "revision" : "178135f1caa1013d7304ff62d02e6febaf40d666",
+        "version" : "1.0.2"
       }
     }
   ],
