@@ -5,7 +5,7 @@
 
 import Foundation
 
-class ErrorCodeConfiguration : Codable {
+public class ErrorCodeConfiguration : Codable {
     
     var errorCode : Int
     var errorDescriptionAr : String?
@@ -17,7 +17,7 @@ class ErrorCodeConfiguration : Codable {
         case errorDescriptionEn = "errorDescriptionEn"
     }
     
-    required init(from decoder: Decoder) throws {
+    public required init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         errorCode = try values.decodeIfPresent(Int.self, forKey: .errorCode) ?? 0
         errorDescriptionAr = try values.decodeIfPresent(String.self, forKey: .errorDescriptionAr)

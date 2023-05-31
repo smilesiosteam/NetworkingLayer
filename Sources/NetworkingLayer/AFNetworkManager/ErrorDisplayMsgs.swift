@@ -9,7 +9,7 @@
 import Foundation
 import SmilesLanguageManager
 
-class ErrorDisplayMsgs{
+public class ErrorDisplayMsgs{
     
     static func returnServiceFailureMessage(response : BaseMainResponse) -> String{
         if let responseMSG = response.responseMsg, !responseMSG.isEmpty{

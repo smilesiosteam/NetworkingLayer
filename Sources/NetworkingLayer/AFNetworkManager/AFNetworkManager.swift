@@ -9,7 +9,7 @@ import Alamofire
 import Foundation
 import SmilesLanguageManager
 
-class NetworkManager {
+public class NetworkManager {
     var manager: Session!
     
     var serviceConfig: ServiceConfiguration?

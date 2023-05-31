@@ -8,7 +8,7 @@
 import Foundation
 import Alamofire
 
-extension Request {
+public extension Request {
     public func debugLog() -> Self {
         if let request = request, let httpBodyData = request.httpBody{
             
@@ -29,4 +29,15 @@ extension Request {
         }
         return self
     }
+}
+
+public extension URLRequest {
+    
+    mutating func setHeaders(headers: [String: String]?) {
+        guard let headers = headers else { return }
+        for (headerField,value) in headers {
+            addValue(value, forHTTPHeaderField: headerField)
+        }
+    }
+    
 }
