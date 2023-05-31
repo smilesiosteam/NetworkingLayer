@@ -8,7 +8,7 @@
 import Foundation
 import SmilesBaseMainRequestManager
 
-public class BaseMainResponse : Codable {
+open class BaseMainResponse : Codable {
     
     public var additionalInfo : [BaseMainResponseAdditionalInfo]?
     public var responseCode : String?

@@ -9,7 +9,7 @@ import Foundation
 import Alamofire
 
 public extension Request {
-    public func debugLog() -> Self {
+    func debugLog() -> Self {
         if let request = request, let httpBodyData = request.httpBody{
             
             let  requestString = "[" + String(data: httpBodyData, encoding: .utf8)! + "]"

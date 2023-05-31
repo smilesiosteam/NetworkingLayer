@@ -14,7 +14,7 @@ public class NetworkManager {
     
     var serviceConfig: ServiceConfiguration?
     
-    init(requestTimeout: Double = 60) {
+    public init(requestTimeout: Double = 60) {
         NetworkConnectivity.shared.startNetworkReachabilityObserver()
         self.manager = self.getAlamofireManager(timeout: requestTimeout)
     }

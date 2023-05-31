@@ -7,9 +7,9 @@ import Foundation
 
 public class ErrorCodeConfiguration : Codable {
     
-    var errorCode : Int
-    var errorDescriptionAr : String?
-    var errorDescriptionEn : String?
+    public var errorCode : Int
+    public var errorDescriptionAr : String?
+    public var errorDescriptionEn : String?
     
     enum CodingKeys: String, CodingKey {
         case errorCode = "errorCode"
@@ -24,7 +24,7 @@ public class ErrorCodeConfiguration : Codable {
         errorDescriptionEn = try values.decodeIfPresent(String.self, forKey: .errorDescriptionEn)
     }
     
-    required init()
+    public required init()
     {
         self.errorCode = 0
         self.errorDescriptionAr = ""
