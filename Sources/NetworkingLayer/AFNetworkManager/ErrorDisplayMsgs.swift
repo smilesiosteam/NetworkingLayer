@@ -11,7 +11,7 @@ import SmilesLanguageManager
 
 public class ErrorDisplayMsgs{
     
-    static func returnServiceFailureMessage(response : BaseMainResponse) -> String{
+    public static func returnServiceFailureMessage(response : BaseMainResponse) -> String{
         if let responseMSG = response.responseMsg, !responseMSG.isEmpty{
             return responseMSG
         }
@@ -23,7 +23,7 @@ public class ErrorDisplayMsgs{
         }
     }
     
-    static func returnNetworkErrorMessage(error : ErrorCodeConfiguration?) -> String{
+    public static func returnNetworkErrorMessage(error : ErrorCodeConfiguration?) -> String{
         
         if let error = error{
             if let errorEn = error.errorDescriptionEn, !errorEn.isEmpty{
@@ -43,7 +43,7 @@ public class ErrorDisplayMsgs{
     }
     
     
-    static func isResponseFaild(response : BaseMainResponse) -> Bool{
+    public static func isResponseFaild(response : BaseMainResponse) -> Bool{
         if let responseMSG = response.responseMsg, !responseMSG.isEmpty{
             return true
         }
