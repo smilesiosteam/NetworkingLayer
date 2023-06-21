@@ -34,7 +34,7 @@ public class NetworkManager {
     }
     
     
-    public final func executeRequest<T: BaseMainResponse>(for: T.Type = T.self, _ requestIdentifier: URLRequestConvertible?, successBlock: @escaping (AFResult<T>) -> (), failureBlock: @escaping (_ error: ErrorCodeConfiguration?) -> ()) {
+    public final func executeRequest<T: Codable>(for: T.Type = T.self, _ requestIdentifier: URLRequestConvertible?, successBlock: @escaping (AFResult<T>) -> (), failureBlock: @escaping (_ error: ErrorCodeConfiguration?) -> ()) {
         
         NetworkConnectivity.shared.startNetworkReachabilityObserver()
         if NetworkConnectivity.shared.currentStatus == .notReachable {
@@ -56,6 +56,8 @@ public class NetworkManager {
         }else {
             self.manager.request(requestIdentifier!).debugLog().responseData { response in
                 print("URL Request ====\n\(response.request?.url?.absoluteString ?? "")")
+                
+                print("Headers ====\n\(response.request?.headers)")
                 
                 print("Request ====\n\(String(data: response.request?.httpBody ?? Data.init(), encoding: .utf8) ?? "")")
                 
