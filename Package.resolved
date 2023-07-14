@@ -19,6 +19,15 @@
       }
     },
     {
+      "identity" : "sdwebimage",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/SDWebImage/SDWebImage.git",
+      "state" : {
+        "revision" : "633996a807442ec28df9d33b0f88ce57a0e2fdbf",
+        "version" : "5.17.0"
+      }
+    },
+    {
       "identity" : "skeletonview",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Juanpe/SkeletonView.git",
@@ -32,8 +41,17 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/smilesiosteam/SmilesBaseMainRequest.git",
       "state" : {
-        "revision" : "132a0e82f71402e3ea78bcfb50a4a264e3a3585f",
-        "version" : "1.0.4"
+        "branch" : "main",
+        "revision" : "306ab0bb0ba9433427dc91cf35ac24bf31d23ed7"
+      }
+    },
+    {
+      "identity" : "smilesfontsmanager",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/smilesiosteam/SmilesFontsManager.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "1a7068cb5a728cb7761aceb44d1c1ab2e88eba74"
       }
     },
     {
@@ -41,17 +59,17 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/smilesiosteam/SmilesLanguageManager.git",
       "state" : {
-        "revision" : "1ead4bcf578ffdeee7318bddfd3d8b2dbdcc2597",
-        "version" : "1.0.0"
+        "branch" : "main",
+        "revision" : "c28ecadeb4df3785ba082363895b3d0248a9903a"
       }
     },
     {
       "identity" : "smilesstorage",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/hananahmad/SmilesStorage.git",
+      "location" : "https://github.com/smilesiosteam/SmilesStorage.git",
       "state" : {
-        "revision" : "178135f1caa1013d7304ff62d02e6febaf40d666",
-        "version" : "1.0.2"
+        "branch" : "main",
+        "revision" : "89a57c302aab530f033ba35f001b09cfee822707"
       }
     },
     {
@@ -59,8 +77,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/smilesiosteam/SmilesUtilities.git",
       "state" : {
-        "revision" : "1fb064b98c63dc7956c5773c4ed892822bb85de5",
-        "version" : "1.0.5"
+        "branch" : "main",
+        "revision" : "d06a25cdb0bdf0c82ab46c9530ed41b76976a2b1"
       }
     }
   ],
