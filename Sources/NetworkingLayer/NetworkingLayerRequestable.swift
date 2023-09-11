@@ -37,6 +37,7 @@ public class NetworkingLayerRequestable: NSObject, Requestable {
         let urlSession = URLSession(configuration: sessionConfig, delegate: delegate, delegateQueue: nil)
         return urlSession
             .dataTaskPublisher(for: req.buildURLRequest(with: url))
+            .subscribe(on: DispatchQueue.global(qos: .background))
             .tryMap { output in
                 // throw an error if response is nil
                 guard output.response is HTTPURLResponse else {
