@@ -37,15 +37,6 @@
       }
     },
     {
-      "identity" : "smilesbasemainrequest",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/smilesiosteam/SmilesBaseMainRequest.git",
-      "state" : {
-        "branch" : "shared_models",
-        "revision" : "dbbbe487f66eb13e5a59e6a6b6b5537fe7dc878e"
-      }
-    },
-    {
       "identity" : "smilesfontsmanager",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/smilesiosteam/SmilesFontsManager.git",
@@ -69,7 +60,7 @@
       "location" : "https://github.com/smilesiosteam/SmilesSharedModels.git",
       "state" : {
         "branch" : "main",
-        "revision" : "dbdb39fa160f3047d4c9b06b603e9936efc1b363"
+        "revision" : "67411d870326944b368783af9c7688e3237e255b"
       }
     },
     {

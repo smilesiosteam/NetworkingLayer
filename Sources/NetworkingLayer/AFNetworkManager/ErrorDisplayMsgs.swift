@@ -8,6 +8,7 @@
 
 import Foundation
 import SmilesLanguageManager
+import SmilesSharedModels
 
 public class ErrorDisplayMsgs{
     

@@ -1,5 +1,6 @@
 import Combine
 import Foundation
+import SmilesSharedModels
 
 public class NetworkingLayerRequestable: NSObject, Requestable {
     

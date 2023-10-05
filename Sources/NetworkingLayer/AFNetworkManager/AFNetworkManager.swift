@@ -8,6 +8,7 @@
 import Alamofire
 import Foundation
 import SmilesLanguageManager
+import SmilesSharedModels
 
 public class NetworkManager {
     var manager: Session!
