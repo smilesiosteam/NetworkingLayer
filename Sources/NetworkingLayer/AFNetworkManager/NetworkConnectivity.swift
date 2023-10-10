@@ -31,21 +31,21 @@ class NetworkConnectivity {
                     self.lastStatus = self.currentStatus
                 }
                 self.currentStatus = status
+                
+                
+                switch status {
+                case .notReachable:
+                    networkStatusMessage = "network"
+                case .unknown:
+                    networkStatusMessage = "unknown.connection.error"
+                case .reachable(.ethernetOrWiFi):
+                    networkStatusMessage = "connected.wifi"
+                case .reachable(.cellular):
+                    networkStatusMessage = "connected.wwan"
+                }
+                
+                print("Network Status\(networkStatusMessage ?? "")")
             }
-            
-            switch status {
-            case .notReachable:
-                networkStatusMessage = "network"
-            case .unknown:
-                networkStatusMessage = "unknown.connection.error"
-            case .reachable(.ethernetOrWiFi):
-                networkStatusMessage = "connected.wifi"
-            case .reachable(.cellular):
-                networkStatusMessage = "connected.wwan"
-            }
-            
-            print("Network Status\(networkStatusMessage ?? "")")
-
         })
         
         
