@@ -7,12 +7,13 @@
 //
 
 import Alamofire
+import Foundation
 
 class NetworkConnectivity {
     static let shared = NetworkConnectivity()
     
     private let reachabilityManager = Alamofire.NetworkReachabilityManager(host: "www.google.com")
-    
+    private let concurrentQueue = DispatchQueue(label: "com.example.NetworkConnectivity.concurrentQueue", attributes: .concurrent)
     private init() {}
     
     var lastStatus: NetworkReachabilityManager.NetworkReachabilityStatus?
@@ -20,12 +21,18 @@ class NetworkConnectivity {
     
     func startNetworkReachabilityObserver() {
         var networkStatusMessage: String?
-        self.reachabilityManager?.startListening(onUpdatePerforming: { status in
-            if self.currentStatus != nil {
-                self.lastStatus = self.currentStatus
+        self.reachabilityManager?.startListening(onUpdatePerforming: { [weak self] status in
+            guard let self else {
+                return
             }
             
-            self.currentStatus = status
+            self.concurrentQueue.async(flags: .barrier) {
+                if self.currentStatus != nil {
+                    self.lastStatus = self.currentStatus
+                }
+                self.currentStatus = status
+            }
+            
             switch status {
             case .notReachable:
                 networkStatusMessage = "network"
