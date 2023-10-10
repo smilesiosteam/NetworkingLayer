@@ -14,27 +14,22 @@ class NetworkConnectivity {
     
     private let reachabilityManager = Alamofire.NetworkReachabilityManager(host: "www.google.com")
     private let concurrentQueue = DispatchQueue(label: "com.example.NetworkConnectivity.concurrentQueue", attributes: .concurrent)
-    private let serialQueue = DispatchQueue(label: "com.example.NetworkConnectivity.serialQueue")
-    private init() {}
-    
-    //    var lastStatus: NetworkReachabilityManager.NetworkReachabilityStatus?
-    //    var currentStatus: NetworkReachabilityManager.NetworkReachabilityStatus?
     private var _lastStatus: NetworkReachabilityManager.NetworkReachabilityStatus?
     private var _currentStatus: NetworkReachabilityManager.NetworkReachabilityStatus?
     
+    private init() {}
+    
     var lastStatus: NetworkReachabilityManager.NetworkReachabilityStatus? {
-        return serialQueue.sync {
+        return concurrentQueue.sync {
             return _lastStatus
         }
     }
     
     var currentStatus: NetworkReachabilityManager.NetworkReachabilityStatus? {
-        return serialQueue.sync {
+        return concurrentQueue.sync {
             return _currentStatus
         }
     }
-    
-    
     
     func startNetworkReachabilityObserver() {
         var networkStatusMessage: String?
@@ -64,7 +59,5 @@ class NetworkConnectivity {
             print("Network Status\(networkStatusMessage ?? "")")
             
         })
-        
-        
     }
 }
