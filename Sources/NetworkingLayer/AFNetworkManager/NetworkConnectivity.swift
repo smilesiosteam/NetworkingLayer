@@ -14,10 +14,27 @@ class NetworkConnectivity {
     
     private let reachabilityManager = Alamofire.NetworkReachabilityManager(host: "www.google.com")
     private let concurrentQueue = DispatchQueue(label: "com.example.NetworkConnectivity.concurrentQueue", attributes: .concurrent)
+    private let serialQueue = DispatchQueue(label: "com.example.NetworkConnectivity.serialQueue")
     private init() {}
     
-    var lastStatus: NetworkReachabilityManager.NetworkReachabilityStatus?
-    var currentStatus: NetworkReachabilityManager.NetworkReachabilityStatus?
+    //    var lastStatus: NetworkReachabilityManager.NetworkReachabilityStatus?
+    //    var currentStatus: NetworkReachabilityManager.NetworkReachabilityStatus?
+    private var _lastStatus: NetworkReachabilityManager.NetworkReachabilityStatus?
+    private var _currentStatus: NetworkReachabilityManager.NetworkReachabilityStatus?
+    
+    var lastStatus: NetworkReachabilityManager.NetworkReachabilityStatus? {
+        return serialQueue.sync {
+            return _lastStatus
+        }
+    }
+    
+    var currentStatus: NetworkReachabilityManager.NetworkReachabilityStatus? {
+        return serialQueue.sync {
+            return _currentStatus
+        }
+    }
+    
+    
     
     func startNetworkReachabilityObserver() {
         var networkStatusMessage: String?
@@ -27,25 +44,25 @@ class NetworkConnectivity {
             }
             
             self.concurrentQueue.async(flags: .barrier) {
-                if self.currentStatus != nil {
-                    self.lastStatus = self.currentStatus
+                if self._currentStatus != nil {
+                    self._lastStatus = self._currentStatus
                 }
-                self.currentStatus = status
-                
-                
-                switch status {
-                case .notReachable:
-                    networkStatusMessage = "network"
-                case .unknown:
-                    networkStatusMessage = "unknown.connection.error"
-                case .reachable(.ethernetOrWiFi):
-                    networkStatusMessage = "connected.wifi"
-                case .reachable(.cellular):
-                    networkStatusMessage = "connected.wwan"
-                }
-                
-                print("Network Status\(networkStatusMessage ?? "")")
+                self._currentStatus = status
             }
+            
+            switch status {
+            case .notReachable:
+                networkStatusMessage = "network"
+            case .unknown:
+                networkStatusMessage = "unknown.connection.error"
+            case .reachable(.ethernetOrWiFi):
+                networkStatusMessage = "connected.wifi"
+            case .reachable(.cellular):
+                networkStatusMessage = "connected.wwan"
+            }
+            
+            print("Network Status\(networkStatusMessage ?? "")")
+            
         })
         
         
