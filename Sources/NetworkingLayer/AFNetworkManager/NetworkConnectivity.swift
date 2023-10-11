@@ -21,13 +21,13 @@ class NetworkConnectivity {
     
     var lastStatus: NetworkReachabilityManager.NetworkReachabilityStatus? {
         return concurrentQueue.sync {
-            return _lastStatus
+            _lastStatus
         }
     }
     
     var currentStatus: NetworkReachabilityManager.NetworkReachabilityStatus? {
         return concurrentQueue.sync {
-            return _currentStatus
+            _currentStatus
         }
     }
     

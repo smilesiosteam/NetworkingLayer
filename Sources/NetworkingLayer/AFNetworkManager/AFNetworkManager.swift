@@ -34,7 +34,7 @@ public class NetworkManager {
     }
     
     
-    public final func executeRequest<T: Codable>(for: T.Type = T.self, _ requestIdentifier: URLRequestConvertible?, successBlock: @escaping (AFResult<T>) -> (), failureBlock: @escaping (_ error: ErrorCodeConfiguration?) -> ()) {
+    public final func executeRequest<T: BaseMainResponse>(for: T.Type = T.self, _ requestIdentifier: URLRequestConvertible?, successBlock: @escaping (AFResult<T>) -> (), failureBlock: @escaping (_ error: ErrorCodeConfiguration?) -> ()) {
         
         NetworkConnectivity.shared.startNetworkReachabilityObserver()
         if NetworkConnectivity.shared.currentStatus == .notReachable {
@@ -68,7 +68,7 @@ public class NetworkManager {
                 
                 if let responseObject = response.response, responseObject.statusCode != 200 {
                     if let data = response.data {
-                        if let errorResponse = try? JSONDecoder().decode(BaseMainResponse.self, from: data) {
+                        if let errorResponse = try? JSONDecoder().decode(T.self, from: data) {
                             let errorModel = ErrorCodeConfiguration()
                             errorModel.errorDescriptionEn = errorResponse.responseMsg ?? errorResponse.errorMsg
                             errorModel.errorDescriptionAr = errorResponse.responseMsg ?? errorResponse.errorMsg
@@ -92,7 +92,7 @@ public class NetworkManager {
                     
                     let decoder = JSONDecoder()
                     if let data = response.data {
-                        if let baseResponse = try? decoder.decode(BaseMainResponse.self, from: data){
+                        if let baseResponse = try? decoder.decode(T.self, from: data){
                             if let errorMsg = baseResponse.errorMsg, !errorMsg.isEmpty, let errorCode = baseResponse.errorCode, !errorCode.isEmpty {
                                 let errorModel = ErrorCodeConfiguration()
                                 errorModel.errorCode = Int(errorCode) ?? 0
