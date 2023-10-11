@@ -55,7 +55,7 @@ public protocol BaseMainResponse: Codable {
 }
 
 
-extension BaseMainResponse {
+public extension BaseMainResponse {
     var additionalInfo : [BaseMainResponseAdditionalInfo]? {
         []
     }
