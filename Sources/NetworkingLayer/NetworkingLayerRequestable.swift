@@ -8,7 +8,7 @@ public class NetworkingLayerRequestable: NSObject, Requestable {
         self.requestTimeOut = requestTimeOut
     }
     
-    public func request<T>(_ req: NetworkRequest) -> AnyPublisher<T, NetworkError>
+    public func request<T: BaseMainResponse>(_ req: NetworkRequest) -> AnyPublisher<T, NetworkError>
     where T: Decodable, T: Encodable {
         let sessionConfig = URLSessionConfiguration.default
         sessionConfig.timeoutIntervalForRequest = TimeInterval(req.requestTimeOut ?? requestTimeOut)
@@ -46,7 +46,7 @@ public class NetworkingLayerRequestable: NSObject, Requestable {
                 
                 let decoder = JSONDecoder()
                 do {
-                    let result = try decoder.decode(BaseMainResponse.self, from: output.data)
+                    let result = try decoder.decode(T.self, from: output.data)
                     if let errorCode = result.errorCode, errorCode == NetworkErrorCode.sessionExpired.rawValue || errorCode == NetworkErrorCode.sessionExpired2.rawValue {
                         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "SessionExpired"), object: nil)
                     }
