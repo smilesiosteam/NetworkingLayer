@@ -62,7 +62,7 @@ public class NetworkingLayerRequestable: NSObject, Requestable {
             .decode(type: T.self, decoder: JSONDecoder())
             .mapError { error in
                 // return error if json decoding fails
-                NetworkError.noResponse(String(describing: error))
+                NetworkError.noResponse(String(describing: error.localizedDescription))
             }
             .receive(on: RunLoop.main)
             .eraseToAnyPublisher()
