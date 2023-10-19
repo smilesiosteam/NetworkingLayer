@@ -84,30 +84,58 @@ public enum NetworkError: LocalizedError, Equatable, Error {
     case networkNotReachable(_ error: String)
     
     public var localizedDescription: String {
-        switch self {
-        case .badURL(let error):
-            return error.localizedDescription
-        case .noResponse(let error):
-            return error.localizedDescription
-        case .networkNotReachable(let error):
-            return error.localizedDescription
-        case .unableToParseData(let error):
-            return error.localizedDescription
-        case .invalidJSON( let error):
-            return error.localizedDescription
-        case .apiError(_, let error) :
-            return error.localizedDescription
-        case .unauthorized(_, let error):
-            return error.localizedDescription
-        case .badRequest(_, let error):
-            return error.localizedDescription
-        case .serverError(_, let error):
-            return error.localizedDescription
-        case .unknown(_, let error):
-            return error.localizedDescription
-       
+            switch self {
+            case .badURL(let error):
+                return NSLocalizedString("Bad URL Error: \(error)", comment: "Bad URL Error")
+            case .apiError(let code, let error):
+                return NSLocalizedString("API Error (Code \(code)): \(error)", comment: "API Error")
+            case .invalidJSON(let error):
+                return NSLocalizedString("Invalid JSON Error: \(error)", comment: "Invalid JSON Error")
+            case .unauthorized(let code, let error):
+                return NSLocalizedString("Unauthorized Error (Code \(code)): \(error)", comment: "Unauthorized Error")
+            case .badRequest(let code, let error):
+                return NSLocalizedString("Bad Request Error (Code \(code)): \(error)", comment: "Bad Request Error")
+            case .serverError(let code, let error):
+                return NSLocalizedString("Server Error (Code \(code)): \(error)", comment: "Server Error")
+            case .noResponse(let error):
+                return NSLocalizedString("No Response Error: \(error)", comment: "No Response Error")
+            case .unableToParseData(let error):
+                return NSLocalizedString("Unable to Parse Data Error: \(error)", comment: "Unable to Parse Data Error")
+            case .unknown(let code, let error):
+                return NSLocalizedString("Unknown Error (Code \(code)): \(error)", comment: "Unknown Error")
+//            case .networkNotReachable(let error):
+//                return NSLocalizedString("Network Not Reachable Error: \(error)", comment: "Network Not Reachable Error")
+                
+            default:
+                return "Server error"
+            }
         }
-    }
+    
+//    public var localizedDescription: String {
+//        switch self {
+//        case .badURL(let error):
+//            return error.localizedDescription
+//        case .noResponse(let error):
+//            return error.localizedDescription
+//        case .networkNotReachable(let error):
+//            return error.localizedDescription
+//        case .unableToParseData(let error):
+//            return error.localizedDescription
+//        case .invalidJSON( let error):
+//            return error.localizedDescription
+//        case .apiError(_, let error) :
+//            return error.localizedDescription
+//        case .unauthorized(_, let error):
+//            return error.localizedDescription
+//        case .badRequest(_, let error):
+//            return error.localizedDescription
+//        case .serverError(_, let error):
+//            return error.localizedDescription
+//        case .unknown(_, let error):
+//            return error.localizedDescription
+//       
+//        }
+//    }
 }
 
 extension Encodable {
