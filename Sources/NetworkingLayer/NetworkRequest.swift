@@ -71,7 +71,7 @@ public enum SmilesHTTPMethod: String {
     case DELETE
 }
 
-public enum NetworkError: LocalizedError, Equatable {
+public enum NetworkError: LocalizedError, Equatable, Error {
     case badURL(_ error: String)
     case apiError(code: Int, error: String)
     case invalidJSON(_ error: String)
