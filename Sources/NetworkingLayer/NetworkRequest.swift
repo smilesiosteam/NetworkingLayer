@@ -82,6 +82,24 @@ public enum NetworkError: LocalizedError, Equatable, Error {
     case unableToParseData(_ error: String)
     case unknown(code: Int, error: String)
     case networkNotReachable(_ error: String)
+    
+    public var errorDescription: String? {
+        switch self {
+        case .badURL(let error), .noResponse(let error), .networkNotReachable(let error), .unableToParseData(let error), .invalidJSON( let error):
+            return error.localizedDescription
+        case .apiError(_, let error) :
+            return error.localizedDescription
+        case .unauthorized(_, let error):
+            return error.localizedDescription
+        case .badRequest(_, let error):
+            return error.localizedDescription
+        case .serverError(_, let error):
+            return error.localizedDescription
+        case .unknown(_, let error):
+            return error.localizedDescription
+       
+        }
+    }
 }
 
 extension Encodable {

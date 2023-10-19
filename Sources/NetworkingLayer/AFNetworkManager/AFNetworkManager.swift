@@ -57,7 +57,7 @@ public class NetworkManager {
             self.manager.request(requestIdentifier!).debugLog().responseData { response in
                 print("URL Request ====\n\(response.request?.url?.absoluteString ?? "")")
                 
-                print("Headers ====\n\(response.request?.headers)")
+                print("Headers ====\n\(response.request?.headers ?? [])")
                 
                 print("Request ====\n\(String(data: response.request?.httpBody ?? Data.init(), encoding: .utf8) ?? "")")
                 

@@ -51,7 +51,7 @@ public class NetworkingLayerRequestable: NSObject, Requestable {
                         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "SessionExpired"), object: nil)
                     }
                     if let errorMessage = result.errorMsg, !errorMessage.isEmpty {
-                        throw NSError(domain: "Smiles", code: Int(result.errorCode ?? "") ?? 0, userInfo: [NSLocalizedDescriptionKey : errorMessage])
+                        throw NetworkError.apiError(code: Int(result.errorCode ?? "") ?? 0, error: errorMessage)
                     }
                 }
                 if let jsonString = output.data.prettyPrintedJSONString {
