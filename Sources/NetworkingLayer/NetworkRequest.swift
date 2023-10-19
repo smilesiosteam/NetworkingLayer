@@ -83,7 +83,7 @@ public enum NetworkError: LocalizedError, Equatable, Error {
     case unknown(code: Int, error: String)
     case networkNotReachable(_ error: String)
     
-    public var errorDescription: String? {
+    public var localizedDescription: String? {
         switch self {
         case .badURL(let error), .noResponse(let error), .networkNotReachable(let error), .unableToParseData(let error), .invalidJSON( let error):
             return error.localizedDescription
