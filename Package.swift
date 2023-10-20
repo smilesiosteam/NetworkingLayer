@@ -20,7 +20,7 @@ let package = Package(
         .package(url: "https://github.com/krzyzanowskim/CryptoSwift.git", .upToNextMajor(from: "1.8.0")),
         .package(url: "https://github.com/Alamofire/Alamofire.git", .upToNextMajor(from: "5.6.4")),
         .package(url: "https://github.com/smilesiosteam/SmilesLanguageManager.git", branch: "main"),
-        .package(url: "https://github.com/smilesiosteam/SmilesBaseMainRequest.git", branch: "main"),
+        .package(url: "https://github.com/smilesiosteam/SmilesBaseMainRequest.git", branch: "feature/move-AESEncryption"),
         .package(url: "https://github.com/smilesiosteam/SmilesUtilities.git", branch: "main")
     ],
     targets: [

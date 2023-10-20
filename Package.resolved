@@ -41,8 +41,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/smilesiosteam/SmilesBaseMainRequest.git",
       "state" : {
-        "branch" : "main",
-        "revision" : "40ef84d1b1c2d887ce3f6c17dec5c37977c20a9f"
+        "branch" : "feature/move-AESEncryption",
+        "revision" : "798e0c36c11ae26fc97377132d8d18c6aa17c8d5"
       }
     },
     {
