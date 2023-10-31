@@ -80,7 +80,7 @@ extension NetworkingLayerRequestable: URLSessionDelegate {
             completionHandler(.cancelAuthenticationChallenge, nil)
             return
         }
-        let pinner = PublicKeyPinner()
+        let pinner = PublicKeyPinner.shared
         if pinner.validate(serverTrust: trust) {
             completionHandler(.useCredential, nil)
         } else {

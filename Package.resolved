@@ -5,8 +5,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Alamofire/Alamofire.git",
       "state" : {
-        "revision" : "b2fa556e4e48cbf06cf8c63def138c98f4b811fa",
-        "version" : "5.8.0"
+        "revision" : "3dc6a42c7727c49bf26508e29b0a0b35f9c7e1ad",
+        "version" : "5.8.1"
       }
     },
     {
@@ -23,8 +23,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/SDWebImage/SDWebImage.git",
       "state" : {
-        "revision" : "1f06ef5007b6a580b3873ed2adee19e05d3b215a",
-        "version" : "5.18.3"
+        "revision" : "fd1950de05a5ad77cb252fd88576c1e1809ee50d",
+        "version" : "5.18.4"
       }
     },
     {
@@ -42,7 +42,7 @@
       "location" : "https://github.com/smilesiosteam/SmilesBaseMainRequest.git",
       "state" : {
         "branch" : "main",
-        "revision" : "40ef84d1b1c2d887ce3f6c17dec5c37977c20a9f"
+        "revision" : "a8275beebe22d78e75e5fb6ca6420f808249977a"
       }
     },
     {
@@ -60,7 +60,7 @@
       "location" : "https://github.com/smilesiosteam/SmilesLanguageManager.git",
       "state" : {
         "branch" : "main",
-        "revision" : "ec56617c4be91c35133f4fe59b403947cbcad1af"
+        "revision" : "d70bc6f7a910dd4e7dcae9224b4988500cd1006e"
       }
     },
     {
@@ -78,7 +78,7 @@
       "location" : "https://github.com/smilesiosteam/SmilesUtilities.git",
       "state" : {
         "branch" : "main",
-        "revision" : "2f255ce4843ea30162656f5bd749f63732f74f96"
+        "revision" : "3d707299dba8eda8376faa640fbb5bb40159f915"
       }
     }
   ],

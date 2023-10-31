@@ -10,14 +10,16 @@ import Foundation
 import CryptoKit
 import CryptoSwift
 
-@objc final class PublicKeyPinner: NSObject {
+@objc final public class PublicKeyPinner: NSObject {
+    
+    @objc public static let shared = PublicKeyPinner()
+
     /// Stored public key hashes
     private var hashes = [String]()
 
-    override init() {
+    private override init() {
         if let hashKey = Bundle.main.infoDictionary?["SSL_HASH_KEY"] as? String {
-            print("HASH KEY: \(hashKey)")
-            self.hashes.append(hashKey)
+            self.hashes = [hashKey]
         }
     }
 
@@ -30,7 +32,7 @@ import CryptoSwift
     /// Validates an object used to evaluate trust's certificate by comparing their's public key hashes to the known, trused key hashes stored in the app
     /// Configuration.
     /// - Parameter serverTrust: The object used to evaluate trust.
-    @objc func validate(serverTrust: SecTrust) -> Bool {
+    @objc public func validate(serverTrust: SecTrust) -> Bool {
         
         // Set SSL policies for domain name check, if needed
 //        if let domain = domain {
