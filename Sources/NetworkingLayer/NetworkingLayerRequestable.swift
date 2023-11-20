@@ -37,6 +37,7 @@ public class NetworkingLayerRequestable: NSObject, Requestable {
         let urlSession = URLSession(configuration: sessionConfig, delegate: delegate, delegateQueue: nil)
         return urlSession
             .dataTaskPublisher(for: req.buildURLRequest(with: url))
+            .subscribe(on: DispatchQueue.global(qos: .background))
             .tryMap { output in
                 // throw an error if response is nil
                 guard output.response is HTTPURLResponse else {
@@ -61,7 +62,7 @@ public class NetworkingLayerRequestable: NSObject, Requestable {
             .decode(type: T.self, decoder: JSONDecoder())
             .mapError { error in
                 // return error if json decoding fails
-                NetworkError.noResponse(String(describing: error))
+                NetworkError.noResponse((error as? NetworkError)?.localizedDescription ?? "")
             }
             .receive(on: RunLoop.main)
             .eraseToAnyPublisher()
@@ -79,7 +80,7 @@ extension NetworkingLayerRequestable: URLSessionDelegate {
             completionHandler(.cancelAuthenticationChallenge, nil)
             return
         }
-        let pinner = PublicKeyPinner()
+        let pinner = PublicKeyPinner.shared
         if pinner.validate(serverTrust: trust) {
             completionHandler(.useCredential, nil)
         } else {

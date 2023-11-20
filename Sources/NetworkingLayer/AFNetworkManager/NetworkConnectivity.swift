@@ -7,25 +7,44 @@
 //
 
 import Alamofire
+import Foundation
 
 class NetworkConnectivity {
     static let shared = NetworkConnectivity()
     
     private let reachabilityManager = Alamofire.NetworkReachabilityManager(host: "www.google.com")
+    private let concurrentQueue = DispatchQueue(label: "com.example.NetworkConnectivity.concurrentQueue", attributes: .concurrent)
+    private var _lastStatus: NetworkReachabilityManager.NetworkReachabilityStatus?
+    private var _currentStatus: NetworkReachabilityManager.NetworkReachabilityStatus?
     
     private init() {}
     
-    var lastStatus: NetworkReachabilityManager.NetworkReachabilityStatus?
-    var currentStatus: NetworkReachabilityManager.NetworkReachabilityStatus?
+    var lastStatus: NetworkReachabilityManager.NetworkReachabilityStatus? {
+        return concurrentQueue.sync {
+            _lastStatus
+        }
+    }
+    
+    var currentStatus: NetworkReachabilityManager.NetworkReachabilityStatus? {
+        return concurrentQueue.sync {
+            _currentStatus
+        }
+    }
     
     func startNetworkReachabilityObserver() {
         var networkStatusMessage: String?
-        self.reachabilityManager?.startListening(onUpdatePerforming: { status in
-            if self.currentStatus != nil {
-                self.lastStatus = self.currentStatus
+        self.reachabilityManager?.startListening(onUpdatePerforming: { [weak self] status in
+            guard let self else {
+                return
             }
             
-            self.currentStatus = status
+            self.concurrentQueue.async(flags: .barrier) {
+                if self._currentStatus != nil {
+                    self._lastStatus = self._currentStatus
+                }
+                self._currentStatus = status
+            }
+            
             switch status {
             case .notReachable:
                 networkStatusMessage = "network"
@@ -38,9 +57,7 @@ class NetworkConnectivity {
             }
             
             print("Network Status\(networkStatusMessage ?? "")")
-
+            
         })
-        
-        
     }
 }

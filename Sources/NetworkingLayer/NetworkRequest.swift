@@ -1,6 +1,6 @@
 //
 //  File.swift
-//  
+//
 //
 //  Created by Hanan Ahmed on 9/6/22.
 //
@@ -71,7 +71,7 @@ public enum SmilesHTTPMethod: String {
     case DELETE
 }
 
-public enum NetworkError: LocalizedError, Equatable {
+public enum NetworkError: LocalizedError, Equatable, Error {
     case badURL(_ error: String)
     case apiError(code: Int, error: String)
     case invalidJSON(_ error: String)
@@ -82,6 +82,31 @@ public enum NetworkError: LocalizedError, Equatable {
     case unableToParseData(_ error: String)
     case unknown(code: Int, error: String)
     case networkNotReachable(_ error: String)
+    
+    public var localizedDescription: String {
+        switch self {
+        case .badURL(let error):
+            return NSLocalizedString("\(error)", comment: "Bad URL Error")
+        case .apiError(_, let error):
+            return NSLocalizedString("\(error)", comment: "API Error")
+        case .invalidJSON(let error):
+            return NSLocalizedString("\(error)", comment: "Invalid JSON Error")
+        case .unauthorized(_, let error):
+            return NSLocalizedString("\(error)", comment: "Unauthorized Error")
+        case .badRequest(_, let error):
+            return NSLocalizedString("\(error)", comment: "Bad Request Error")
+        case .serverError(_, let error):
+            return NSLocalizedString("\(error)", comment: "Server Error")
+        case .noResponse(let error):
+            return NSLocalizedString("\(error)", comment: "No Response Error")
+        case .unableToParseData(let error):
+            return NSLocalizedString("\(error)", comment: "Unable to Parse Data Error")
+        case .unknown(_, let error):
+            return NSLocalizedString("\(error)", comment: "Unknown Error")
+        case .networkNotReachable(let error):
+            return NSLocalizedString("\(error)", comment: "Network Not Reachable Error")
+        }
+    }
 }
 
 extension Encodable {
