@@ -43,15 +43,17 @@ public class NetworkingLayerRequestable: NSObject, Requestable {
                 guard output.response is HTTPURLResponse else {
                     throw NetworkError.serverError(code: 0, error: "Server error")
                 }
-                
-                let decoder = JSONDecoder()
-                do {
-                    let result = try decoder.decode(BaseMainResponse.self, from: output.data)
-                    if let errorCode = result.errorCode, errorCode == NetworkErrorCode.sessionExpired.rawValue || errorCode == NetworkErrorCode.sessionExpired2.rawValue {
-                        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "SessionExpired"), object: nil)
-                    }
-                    if let errorMessage = result.errorMsg, !errorMessage.isEmpty {
-                        throw NetworkError.apiError(code: Int(result.errorCode ?? "") ?? 0, error: errorMessage)
+                let urlString = output.response.url?.absoluteString ?? ""
+                if !urlString.contains("https://nominatim.openstreetmap.org") {
+                    let decoder = JSONDecoder()
+                    do {
+                        let result = try decoder.decode(BaseMainResponse.self, from: output.data)
+                        if let errorCode = result.errorCode, errorCode == NetworkErrorCode.sessionExpired.rawValue || errorCode == NetworkErrorCode.sessionExpired2.rawValue {
+                            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "SessionExpired"), object: nil)
+                        }
+                        if let errorMessage = result.errorMsg, !errorMessage.isEmpty {
+                            throw NetworkError.apiError(code: Int(result.errorCode ?? "") ?? 0, error: errorMessage)
+                        }
                     }
                 }
                 if let jsonString = output.data.prettyPrintedJSONString {
