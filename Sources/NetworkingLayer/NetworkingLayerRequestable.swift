@@ -54,11 +54,12 @@ public class NetworkingLayerRequestable: NSObject, Requestable {
                         if let errorMessage = result.errorMsg, !errorMessage.isEmpty {
                             throw NetworkError.apiError(code: Int(result.errorCode ?? "") ?? 0, error: errorMessage)
                         }
+                        if let responseCode = result.responseCode, !responseCode.isEmpty {
+                            throw NetworkError.apiError(code: Int(responseCode) ?? 0, error: result.responseMsg ?? "")
+                        }
                     }
                     
-                    if let responseCode = result.responseCode, !responseCode.isEmpty {
-                        throw NetworkError.apiError(code: Int(responseCode) ?? 0, error: result.responseMsg ?? "")
-                    }
+                   
                 }
                 if let jsonString = output.data.prettyPrintedJSONString {
                     print("---------- Request Response ----------\n", jsonString)
