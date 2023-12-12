@@ -57,7 +57,10 @@ public class NetworkingLayerRequestable: NSObject, Requestable {
                         if let errorMessage = result.errorMsg, !errorMessage.isEmpty {
                             throw NetworkError.apiError(code: Int(result.errorCode ?? "") ?? 0, error: errorMessage)
                         }
+                    
                     }
+                    
+                   
                 }
                 return output.data
             }
