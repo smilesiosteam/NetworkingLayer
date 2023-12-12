@@ -43,6 +43,9 @@ public class NetworkingLayerRequestable: NSObject, Requestable {
                 guard output.response is HTTPURLResponse else {
                     throw NetworkError.serverError(code: 0, error: "Server error")
                 }
+                if let jsonString = output.data.prettyPrintedJSONString {
+                    print("---------- Request Response ----------\n", jsonString)
+                }
                 let urlString = output.response.url?.absoluteString ?? ""
                 if !urlString.contains("https://nominatim.openstreetmap.org") {
                     let decoder = JSONDecoder()
@@ -55,9 +58,6 @@ public class NetworkingLayerRequestable: NSObject, Requestable {
                             throw NetworkError.apiError(code: Int(result.errorCode ?? "") ?? 0, error: errorMessage)
                         }
                     }
-                }
-                if let jsonString = output.data.prettyPrintedJSONString {
-                    print("---------- Request Response ----------\n", jsonString)
                 }
                 return output.data
             }
