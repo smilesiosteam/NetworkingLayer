@@ -59,15 +59,25 @@ public class NetworkingLayerRequestable: NSObject, Requestable {
                         }
                     
                     }
-                    
-                   
                 }
                 return output.data
             }
             .decode(type: T.self, decoder: JSONDecoder())
             .mapError { error in
                 // return error if json decoding fails
-                NetworkError.noResponse((error as? NetworkError)?.localizedDescription ?? "")
+                print("API error: \(error)")
+                switch error {
+                case let urlError as URLError:
+                    switch urlError.code {
+                    case .timedOut :
+                        return NetworkError.noResponse("ServiceFail".localizedString)
+                    case .cannotParseResponse:
+                        return NetworkError.unableToParseData("ServiceFail".localizedString)
+                    default: break
+                    }
+                default: break
+                }
+                return NetworkError.noResponse(error.localizedDescription)
             }
             .receive(on: RunLoop.main)
             .eraseToAnyPublisher()
