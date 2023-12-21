@@ -71,10 +71,10 @@ public class NetworkingLayerRequestable: NSObject, Requestable {
                     switch urlError.code {
                     case .timedOut :
                         return NetworkError.noResponse("ServiceFail".localizedString)
-                    case .cannotParseResponse:
-                        return NetworkError.unableToParseData("ServiceFail".localizedString)
                     default: break
                     }
+                case _ as DecodingError:
+                    return NetworkError.unableToParseData("ServiceFail".localizedString)
                 default: break
                 }
                 return NetworkError.noResponse(error.localizedDescription)
