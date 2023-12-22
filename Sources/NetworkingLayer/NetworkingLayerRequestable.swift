@@ -77,7 +77,11 @@ public class NetworkingLayerRequestable: NSObject, Requestable {
                     return NetworkError.unableToParseData("ServiceFail".localizedString)
                 default: break
                 }
-                return NetworkError.noResponse(error.localizedDescription)
+                if let networkError = error as? NetworkError {
+                    return NetworkError.noResponse(networkError.localizedDescription)
+                } else {
+                    return NetworkError.noResponse(error.localizedDescription)
+                }
             }
             .receive(on: RunLoop.main)
             .eraseToAnyPublisher()
