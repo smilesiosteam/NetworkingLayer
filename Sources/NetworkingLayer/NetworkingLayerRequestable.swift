@@ -31,7 +31,6 @@ public class NetworkingLayerRequestable: NSObject, Requestable {
         
         var delegate: URLSessionDelegate? = nil
         if let isSSLEnabled: Bool = SmilesStorageHandler(storageType: .keychain).getValue(forKey: .SSLEnabled), isSSLEnabled {
-            print("SSL Pinning - Delegate has been set for URLSession")
             delegate = self
         }
         let urlSession = URLSession(configuration: sessionConfig, delegate: delegate, delegateQueue: nil)
