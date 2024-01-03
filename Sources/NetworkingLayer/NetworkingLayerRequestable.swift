@@ -1,5 +1,6 @@
 import Combine
 import Foundation
+import SmilesStorage
 
 public class NetworkingLayerRequestable: NSObject, Requestable {
     
@@ -29,10 +30,9 @@ public class NetworkingLayerRequestable: NSObject, Requestable {
         // We use the dataTaskPublisher from the URLSession which gives us a publisher to play around with.
         
         var delegate: URLSessionDelegate? = nil
-        if let webServiceEnvironment = Bundle.main.infoDictionary?["WEB_SERVICE_ENRIRONMENT"] as? String {
-            if webServiceEnvironment == "1" {
-                delegate = self
-            }
+        if let isSSLEnabled: Bool = SmilesStorageHandler(storageType: .keychain).getValue(forKey: .SSLEnabled), isSSLEnabled {
+            print("SSL Pinning - Delegate has been set for URLSession")
+            delegate = self
         }
         let urlSession = URLSession(configuration: sessionConfig, delegate: delegate, delegateQueue: nil)
         return urlSession

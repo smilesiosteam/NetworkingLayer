@@ -8,6 +8,7 @@
 import Alamofire
 import Foundation
 import SmilesLanguageManager
+import SmilesStorage
 
 public class NetworkManager {
     var manager: Session!
@@ -26,7 +27,7 @@ public class NetworkManager {
        
         var alamofireManager = Alamofire.Session(configuration: configuration)
         
-        if let webServiceEnvironment = Bundle.main.infoDictionary?["WEB_SERVICE_ENRIRONMENT"] as? String, webServiceEnvironment == "1" {
+        if let isSSLEnabled: Bool = SmilesStorageHandler(storageType: .keychain).getValue(forKey: .SSLEnabled), isSSLEnabled {
             alamofireManager = Alamofire.Session(configuration: configuration, delegate: NetworkManagerSessionHandler())
         }
         

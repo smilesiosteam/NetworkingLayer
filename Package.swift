@@ -21,7 +21,8 @@ let package = Package(
         .package(url: "https://github.com/Alamofire/Alamofire.git", .upToNextMajor(from: "5.6.4")),
         .package(url: "https://github.com/smilesiosteam/SmilesLanguageManager.git", branch: "main"),
         .package(url: "https://github.com/smilesiosteam/SmilesBaseMainRequest.git", branch: "main"),
-        .package(url: "https://github.com/smilesiosteam/SmilesUtilities.git", branch: "main")
+        .package(url: "https://github.com/smilesiosteam/SmilesUtilities.git", branch: "main"),
+        .package(url: "https://github.com/smilesiosteam/SmilesStorage.git", branch: "main")
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
@@ -33,7 +34,8 @@ let package = Package(
                 .product(name: "Alamofire", package: "Alamofire"),
                 .product(name: "SmilesLanguageManager", package: "SmilesLanguageManager"),
                 .product(name: "SmilesBaseMainRequestManager", package: "SmilesBaseMainRequest"),
-                .product(name: "SmilesUtilities", package: "SmilesUtilities")
+                .product(name: "SmilesUtilities", package: "SmilesUtilities"),
+                .product(name: "SmilesStorage", package: "SmilesStorage")
             ]),
         .testTarget(
             name: "NetworkingLayerTests",
