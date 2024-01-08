@@ -9,6 +9,7 @@
 import Foundation
 import CryptoKit
 import CryptoSwift
+import SmilesStorage
 
 @objc final public class PublicKeyPinner: NSObject {
     
@@ -17,14 +18,7 @@ import CryptoSwift
     /// Stored public key hashes
     private var hashes = [String]()
 
-    private override init() {
-        super.init()
-        if let hashKey = Bundle.main.infoDictionary?["SSL_HASH_KEY"] as? String {
-            concurrentQueue.async(flags: .barrier)  { [weak self] in
-                self?.hashes = [hashKey]
-            }
-        }
-    }
+    private override init() {}
 
     /// ASN1 header for our public key to re-create the subject public key info
     private let rsa2048Asn1Header: [UInt8] = [
@@ -37,12 +31,12 @@ import CryptoSwift
     /// - Parameter serverTrust: The object used to evaluate trust.
     @objc public func validate(serverTrust: SecTrust) -> Bool {
         
-        // Set SSL policies for domain name check, if needed
-//        if let domain = domain {
-//            let policies = NSMutableArray()
-//            policies.add(SecPolicyCreateSSL(true, domain as CFString))
-//            SecTrustSetPolicies(serverTrust, policies)
-//        }
+        if let hashKey: String = SmilesStorageHandler(storageType: .keychain).getValue(forKey: .SSLHashKey), 
+            let trimmedHashKey = hashKey.components(separatedBy: "sha256/").last {
+            concurrentQueue.async(flags: .barrier)  { [weak self] in
+                self?.hashes = [trimmedHashKey]
+            }
+        }
         
         // Check if the trust is valid
         let isValid = SecTrustEvaluateWithError(serverTrust, nil)

@@ -92,6 +92,7 @@ public struct EndPoints {
     public static let validatePartnerPromoCodeEndpoint = "\(loginEndpoint)/validate-partner-promo-code"
     public static let getCaptchaEndpoint = "\(loginEndpoint)/v2/get-captcha"
     public static let getGuestUserEndpoint = "\(loginEndpoint)/login-guest-user"
+    public static let getEligibilityMatrix = "\(loginEndpoint)/get-eligibility-matrix"
     
     //MARK:- Profile EndPoint
     

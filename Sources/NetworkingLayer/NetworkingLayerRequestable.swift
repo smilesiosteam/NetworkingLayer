@@ -1,5 +1,6 @@
 import Combine
 import Foundation
+import SmilesStorage
 
 public class NetworkingLayerRequestable: NSObject, Requestable {
     
@@ -29,10 +30,8 @@ public class NetworkingLayerRequestable: NSObject, Requestable {
         // We use the dataTaskPublisher from the URLSession which gives us a publisher to play around with.
         
         var delegate: URLSessionDelegate? = nil
-        if let webServiceEnvironment = Bundle.main.infoDictionary?["WEB_SERVICE_ENRIRONMENT"] as? String {
-            if webServiceEnvironment == "1" {
-                delegate = self
-            }
+        if let isSSLEnabled: Bool = SmilesStorageHandler(storageType: .keychain).getValue(forKey: .SSLEnabled), isSSLEnabled {
+            delegate = NetworkManagerSessionHandler()
         }
         let urlSession = URLSession(configuration: sessionConfig, delegate: delegate, delegateQueue: nil)
         return urlSession
@@ -42,6 +41,10 @@ public class NetworkingLayerRequestable: NSObject, Requestable {
                 // throw an error if response is nil
                 guard output.response is HTTPURLResponse else {
                     throw NetworkError.serverError(code: 0, error: "Server error")
+                }
+                if let jsonString = output.data.prettyPrintedJSONString {
+                    print("---------- Got Response for ----------\n", output.response.url ?? "")
+                    print("---------- Request Response ----------\n", jsonString)
                 }
                 let urlString = output.response.url?.absoluteString ?? ""
                 if !urlString.contains("https://nominatim.openstreetmap.org") {
@@ -54,48 +57,35 @@ public class NetworkingLayerRequestable: NSObject, Requestable {
                         if let errorMessage = result.errorMsg, !errorMessage.isEmpty {
                             throw NetworkError.apiError(code: Int(result.errorCode ?? "") ?? 0, error: errorMessage)
                         }
-                        if let responseCode = result.responseCode, !responseCode.isEmpty {
-                            throw NetworkError.apiError(code: Int(responseCode) ?? 0, error: result.responseMsg ?? "")
-                        }
-                    }
                     
-                   
-                }
-                if let jsonString = output.data.prettyPrintedJSONString {
-                    print("---------- Request Response ----------\n", jsonString)
+                    }
                 }
                 return output.data
             }
             .decode(type: T.self, decoder: JSONDecoder())
             .mapError { error in
                 // return error if json decoding fails
-                NetworkError.noResponse((error as? NetworkError)?.localizedDescription ?? "")
+                print("API error: \(error)")
+                switch error {
+                case let urlError as URLError:
+                    switch urlError.code {
+                    case .timedOut :
+                        return NetworkError.noResponse("ServiceFail".localizedString)
+                    default: break
+                    }
+                case _ as DecodingError:
+                    return NetworkError.unableToParseData("ServiceFail".localizedString)
+                default: break
+                }
+                if let networkError = error as? NetworkError {
+                    return NetworkError.noResponse(networkError.localizedDescription)
+                } else {
+                    return NetworkError.noResponse(error.localizedDescription)
+                }
             }
-            .receive(on: RunLoop.main)
+            .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher()
     }
-}
-
-extension NetworkingLayerRequestable: URLSessionDelegate {
-    
-    func urlSession(_ session: URLSession, task: URLSessionTask, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
-        guard let urlString = task.currentRequest?.url?.absoluteString, !urlString.contains("https://maps.googleapis.com/maps/api") && !urlString.contains("https://nominatim.openstreetmap.org") else {
-            completionHandler(.useCredential, nil)
-            return
-        }
-        guard let trust = challenge.protectionSpace.serverTrust else {
-            completionHandler(.cancelAuthenticationChallenge, nil)
-            return
-        }
-        let pinner = PublicKeyPinner.shared
-        if pinner.validate(serverTrust: trust) {
-            completionHandler(.useCredential, nil)
-        } else {
-            completionHandler(.cancelAuthenticationChallenge, nil)
-        }
-        
-    }
-    
 }
 
 enum NetworkErrorCode: String {
