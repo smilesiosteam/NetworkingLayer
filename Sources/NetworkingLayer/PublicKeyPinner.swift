@@ -13,13 +13,16 @@ import CryptoSwift
 @objc final public class PublicKeyPinner: NSObject {
     
     @objc public static let shared = PublicKeyPinner()
-
+    private let concurrentQueue = DispatchQueue(label: "com.smiles.publicKeyPinner", attributes: .concurrent)
     /// Stored public key hashes
     private var hashes = [String]()
 
     private override init() {
+        super.init()
         if let hashKey = Bundle.main.infoDictionary?["SSL_HASH_KEY"] as? String {
-            self.hashes = [hashKey]
+            concurrentQueue.async(flags: .barrier)  { [weak self] in
+                self?.hashes = [hashKey]
+            }
         }
     }
 
