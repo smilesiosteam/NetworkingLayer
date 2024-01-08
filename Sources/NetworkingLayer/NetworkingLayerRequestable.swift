@@ -43,6 +43,7 @@ public class NetworkingLayerRequestable: NSObject, Requestable {
                     throw NetworkError.serverError(code: 0, error: "Server error")
                 }
                 if let jsonString = output.data.prettyPrintedJSONString {
+                    print("---------- Got Response for ----------\n", output.response.url ?? "")
                     print("---------- Request Response ----------\n", jsonString)
                 }
                 let urlString = output.response.url?.absoluteString ?? ""

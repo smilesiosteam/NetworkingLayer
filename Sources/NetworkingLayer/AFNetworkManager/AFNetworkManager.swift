@@ -55,18 +55,12 @@ public class NetworkManager {
             failureBlock(errorModel)
             return
         }else {
-            self.manager.request(requestIdentifier!).debugLog().responseData { response in
-                print("URL Request ====\n\(response.request?.url?.absoluteString ?? "")")
+            self.manager.request(requestIdentifier!).debugLog().responseData { [weak self] response in
                 
-                print("Headers ====\n\(response.request?.headers ?? [])")
-                
-                print("Request ====\n\(String(data: response.request?.httpBody ?? Data.init(), encoding: .utf8) ?? "")")
-                
-                print("Response ====\n\(String(data: response.data ?? Data.init(), encoding: .utf8) ?? "")")
-                
+                if let request = response.request, let responseData = response.data {
+                    self?.printRequestData(request: request, response: responseData)
+                }
                 print("play Service Response in networkManager,\(Date())")
-                
-                
                 if let responseObject = response.response, responseObject.statusCode != 200 {
                     if let data = response.data {
                         if let errorResponse = try? JSONDecoder().decode(BaseMainResponse.self, from: data) {
@@ -136,6 +130,23 @@ public class NetworkManager {
     public final func cancelRequest() {
         self.manager.cancelAllRequests()
     }
+    
+    private func printRequestData(request: URLRequest, response: Data) {
+        
+        print("---------- Request URL ----------\n", request.url?.absoluteString ?? "")
+        print("---------- Request Method ----------\n", request.httpMethod ?? "")
+        if let headers = request.allHTTPHeaderFields {
+            print("---------- Request Headers ----------\n", headers)
+        }
+        if let body = request.httpBody, let jsonString = body.prettyPrintedJSONString {
+            print("---------- Request Body ----------\n", jsonString)
+        }
+        if let response = response.prettyPrintedJSONString {
+            print("---------- Request Response ----------\n", response)
+        }
+        
+    }
+    
 }
 
 class NetworkManagerSessionHandler: SessionDelegate {
