@@ -5,8 +5,15 @@ import SmilesStorage
 public class NetworkingLayerRequestable: NSObject, Requestable {
     
     public var requestTimeOut: Float = 60
+    private var urlSession: URLSession?
+    private var delegate: URLSessionDelegate? = nil
+    
     public init(requestTimeOut: Float) {
+        super.init()
         self.requestTimeOut = requestTimeOut
+        if let isSSLEnabled: Bool = SmilesStorageHandler(storageType: .keychain).getValue(forKey: .SSLEnabled), isSSLEnabled {
+            delegate = self
+        }
     }
     
     public func request<T>(_ req: NetworkRequest) -> AnyPublisher<T, NetworkError>
@@ -29,12 +36,8 @@ public class NetworkingLayerRequestable: NSObject, Requestable {
         }
         // We use the dataTaskPublisher from the URLSession which gives us a publisher to play around with.
         
-        var delegate: URLSessionDelegate? = nil
-        if let isSSLEnabled: Bool = SmilesStorageHandler(storageType: .keychain).getValue(forKey: .SSLEnabled), isSSLEnabled {
-            delegate = NetworkManagerSessionHandler()
-        }
-        let urlSession = URLSession(configuration: sessionConfig, delegate: delegate, delegateQueue: nil)
-        return urlSession
+        urlSession = URLSession(configuration: sessionConfig, delegate: delegate, delegateQueue: nil)
+        return urlSession!
             .dataTaskPublisher(for: req.buildURLRequest(with: url))
             .subscribe(on: DispatchQueue.global(qos: .background))
             .tryMap { output in
@@ -86,6 +89,29 @@ public class NetworkingLayerRequestable: NSObject, Requestable {
             .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher()
     }
+}
+
+extension NetworkingLayerRequestable: URLSessionDelegate {
+
+    public func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
+        
+        let urlString = challenge.protectionSpace.host
+        guard !urlString.contains("maps.googleapis.com/maps/api") && !urlString.contains("nominatim.openstreetmap.org") else {
+            completionHandler(.useCredential, nil)
+            return
+        }
+        guard let trust = challenge.protectionSpace.serverTrust else {
+            completionHandler(.cancelAuthenticationChallenge, nil)
+            return
+        }
+        if PublicKeyPinner().validate(serverTrust: trust) {
+            completionHandler(.useCredential, nil)
+        } else {
+            completionHandler(.cancelAuthenticationChallenge, nil)
+        }
+        
+    }
+    
 }
 
 enum NetworkErrorCode: String {
