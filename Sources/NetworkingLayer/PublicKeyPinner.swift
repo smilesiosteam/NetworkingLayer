@@ -11,14 +11,16 @@ import CryptoKit
 import CryptoSwift
 import SmilesStorage
 
-@objc final public class PublicKeyPinner: NSObject {
+final class PublicKeyPinner: NSObject {
     
-    @objc public static let shared = PublicKeyPinner()
-    private let concurrentQueue = DispatchQueue(label: "com.smiles.publicKeyPinner", attributes: .concurrent)
     /// Stored public key hashes
     private var hashes = [String]()
 
-    private override init() {}
+    override init() {
+        if let hashKey: String = SmilesStorageHandler(storageType: .keychain).getValue(forKey: .SSLHashKey), let trimmedHashKey = hashKey.components(separatedBy: "sha256/").last {
+            hashes = [trimmedHashKey]
+        }
+    }
 
     /// ASN1 header for our public key to re-create the subject public key info
     private let rsa2048Asn1Header: [UInt8] = [
@@ -29,15 +31,9 @@ import SmilesStorage
     /// Validates an object used to evaluate trust's certificate by comparing their's public key hashes to the known, trused key hashes stored in the app
     /// Configuration.
     /// - Parameter serverTrust: The object used to evaluate trust.
-    @objc public func validate(serverTrust: SecTrust) -> Bool {
+    func validate(serverTrust: SecTrust) -> Bool {
         
-        if let hashKey: String = SmilesStorageHandler(storageType: .keychain).getValue(forKey: .SSLHashKey), 
-            let trimmedHashKey = hashKey.components(separatedBy: "sha256/").last {
-            concurrentQueue.async(flags: .barrier)  { [weak self] in
-                self?.hashes = [trimmedHashKey]
-            }
-        }
-        
+        guard !hashes.isEmpty else { return false }
         // Check if the trust is valid
         let isValid = SecTrustEvaluateWithError(serverTrust, nil)
 
@@ -54,6 +50,7 @@ import SmilesStorage
 
             // Hash the key, and check it's validity.
             let keyHash = hash(data: (publicKeyData as NSData) as Data)
+            print("This is key hash: \(keyHash)")
             if hashes.contains(keyHash) {
                 // Success! This is our server!
                 return true
